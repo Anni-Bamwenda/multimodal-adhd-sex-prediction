@@ -1,32 +1,35 @@
 # Multimodal Prediction of ADHD Outcome and Sex
 
-This repository implements a **multimodal machine learning pipeline** for predicting two targets:
+**TL;DR**  
+This repository implements a **leakage-free, multimodal machine learning pipeline**
+for **multi-output classification** of:
 
 - **ADHD_Outcome** (binary)
 - **Sex_F** (binary)
 
-using a combination of:
-- categorical metadata
-- quantitative clinical metadata
-- functional connectome features
+using heterogeneous data sources including categorical metadata, quantitative clinical features,
+and high-dimensional functional connectome matrices.
 
-The project emphasizes **engineering rigor, reproducibility, and honest evaluation**,
-following best practices used in research and production ML systems.
+The project emphasizes **engineering rigor, reproducibility, and honest evaluation**, following
+best practices used in modern research and production ML systems.
 
-Note: The project was done as part of Wids Datathon 2025. More details about the datathon can be found [here](https://www.kaggle.com/competitions/widsdatathon2025/overview).
+> This work was developed as part of the **WiDS Datathon 2025**.  
+> Competition details are available [here](https://www.kaggle.com/competitions/widsdatathon2025/overview).
 
 ---
-
 ## 🔍 Problem Setting
 
-The dataset consists of three modalities:
+The dataset contains three distinct modalities:
 
-- **Categorical metadata** (demographics, clinical flags)
-- **Quantitative metadata** (numerical measures)
-- **Functional connectome matrices** (high-dimensional neuroimaging features)
+- **Categorical metadata** — demographics and clinical flags
+- **Quantitative metadata** — numerical clinical measurements
+- **Functional connectome matrices** — high-dimensional neuroimaging features
 
-The task is **multi-output classification**:
-each subject has *two correlated labels* that must be predicted jointly.
+The task is **multi-output classification**, where each subject has *two correlated targets*
+that are predicted jointly.
+
+Rather than treating these as independent problems, this project models them together to
+capture shared structure and correlations across tasks
 
 ---
 
@@ -34,16 +37,16 @@ each subject has *two correlated labels* that must be predicted jointly.
 
 ### 1. Strict Separation of Concerns
 
-Each script has a single responsibility:
+Each script has a single, clearly defined responsibility:
 
 | Script | Responsibility |
 |------|----------------|
-| `preprocess.py` | Load, clean, merge modalities, and save numeric tensors |
-| `feature_select.py` | Feature-selection utilities (no I/O, no splitting) |
-| `train_model.py` | Train/validation split, feature selection, model training |
+| `preprocess.py` | Load raw data, clean, merge modalities, and save numeric tensors |
+| `feature_select.py` | Feature-selection utilities (pure functions, no I/O, no splitting) |
+| `train_model.py` | Train/validation split, feature selection(train only), model training |
 | `evaluate.py` | Validation metrics + test-set prediction only |
 
-This prevents hidden coupling and makes the pipeline auditable.
+This structure makes the pipeline **auditable, testable, and resistant to hidden coupling**.
 
 ---
 
@@ -55,7 +58,7 @@ Any operation that **learns from labels** is restricted to the **training split 
 - Model fitting
 
 Validation data is treated as *future, unseen data*.
-This ensures that reported metrics are **honest and defensible**.
+This prevents optimistic bias and ensures reported metrics are **honest and defensible**.
 
 ---
 
@@ -84,12 +87,13 @@ This avoids:
 - dtype ambiguity
 - CSV parsing errors
 - floating-point drift
+- accidental index misalignment
 
 ---
 
 ## 📂 Repository Structure
-**Please note that the data folder has not been pushed to github for optimal performance reasons.
-You can access TRAIN and TEST data [here](https://www.kaggle.com/competitions/widsdatathon2025/data)
+**Please note that Raw TRAIN and TEST data are **not included** in this repository due to size constraints. 
+They can be downloaded [here](https://www.kaggle.com/competitions/widsdatathon2025/data) directly from Kaggle.
 ```
 multimodal-adhd-sex-prediction/
 ├── data/                    
@@ -148,7 +152,7 @@ Recall
 F1
 ROC-AUC
 
-No aggregate score is used, as this can obscure task-specific performance.
+No aggregate metrics are used, as they can obscure task-specific performance and mask failure modes.
 
 
 ## 📜 Disclaimer
