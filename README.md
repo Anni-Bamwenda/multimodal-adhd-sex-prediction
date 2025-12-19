@@ -1,4 +1,4 @@
-# Multimodal Prediction of ADHD Outcome and Sex from Neuroimaging Data
+# Multimodal Prediction of ADHD Outcome and Sex
 
 This repository implements a **multimodal machine learning pipeline** for predicting two targets:
 
