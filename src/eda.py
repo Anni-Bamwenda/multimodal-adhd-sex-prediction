@@ -1,1 +1,2 @@
-# Exploratory data analysis utilities for the metastatic cancer project.
+# Exploratory data analysis utilities for the multimodal adhd + sex project.
+# Feel free to add any EDA here...
