@@ -13,6 +13,8 @@ using a combination of:
 The project emphasizes **engineering rigor, reproducibility, and honest evaluation**,
 following best practices used in research and production ML systems.
 
+Note: The project was done as part of Wids Datathon 2025. More details about the datathon can be found [here](https://www.kaggle.com/competitions/widsdatathon2025/overview).
+
 ---
 
 ## 🔍 Problem Setting
