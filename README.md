@@ -17,7 +17,7 @@ following best practices used in research and production ML systems.
 
 ## 🔍 Problem Setting
 
-The dataset consists of **heterogeneous modalities**:
+The dataset consists of three modalities:
 
 - **Categorical metadata** (demographics, clinical flags)
 - **Quantitative metadata** (numerical measures)
@@ -86,7 +86,7 @@ This avoids:
 ---
 
 ## 📂 Repository Structure
-**Please note that the data folder has not been pushed to bitbucket for optimal performance reasons.
+**Please note that the data folder has not been pushed to github for optimal performance reasons.
 You can access TRAIN and TEST data [here](https://www.kaggle.com/competitions/widsdatathon2025/data)
 ```
 multimodal-adhd-sex-prediction/
