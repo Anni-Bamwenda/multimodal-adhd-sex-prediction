@@ -86,9 +86,10 @@ This avoids:
 ---
 
 ## 📂 Repository Structure
-
-
-Metastatic-Cancer-Prediction/
+**Please note that the data folder has not been pushed to bitbucket for optimal performance reasons.
+You can access TRAIN and TEST data [here](https://www.kaggle.com/competitions/widsdatathon2025/data)
+```
+multimodal-adhd-sex-prediction/
 ├── data/                    
 │   ├── solution_template.csv
 │   ├── processed\
@@ -100,14 +101,6 @@ Metastatic-Cancer-Prediction/
 │   │   ├── y_train.npy
 │   ├── TEST
 │   └── TRAIN
-├── Images/                    
-│   ├── No. of patient race by region img.png
-│   ├── No. of patients by race img.png
-│   ├── No. of patients with 0days diagnosis period img.png
-    ├── Patient Age distribution img.png
-│   └── Types of payment by patient race img.png
-├── notebooks/              
-│   ├── anni-widsdatathon02.ipynb
 ├── src/                    
 │   ├── preprocess.py
 │   ├── feature_select.py
@@ -116,7 +109,7 @@ Metastatic-Cancer-Prediction/
 ├── requirements.txt
 ├── MODEL_CARD.md
 └── README.md
-
+```
 
 ---
 
@@ -156,7 +149,17 @@ ROC-AUC
 No aggregate score is used, as this can obscure task-specific performance.
 
 
-## 📜 License & Disclaimer
+## 📜 Disclaimer
 
 This project is for research and educational purposes only.
 It is not a medical diagnostic tool.
+
+## 👩🏽‍💻 Author
+
+Anni Bamwenda
+
+Software Engineer II • Data Scientist • AI/ML Engineer
+
+🔗 LinkedIn https://www.linkedin.com/in/annibamwenda/
+
+🔗 GitHub: https://github.com/Anni-Bamwenda
