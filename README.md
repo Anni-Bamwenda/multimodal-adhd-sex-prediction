@@ -1,6 +1,6 @@
 # Multimodal Prediction of ADHD Outcome and Sex
 
-**TL;DR**  
+**Quick Summary**  
 This repository implements a **leakage-free, multimodal machine learning pipeline**
 for **multi-output classification** of:
 
