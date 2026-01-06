@@ -7,11 +7,10 @@ for **multi-output classification** of:
 - **ADHD_Outcome** (binary)
 - **Sex_F** (binary)
 
-using heterogeneous data sources including categorical metadata, quantitative clinical features,
+using heterogeneous data sources, including categorical metadata, quantitative clinical features,
 and high-dimensional functional connectome matrices.
 
-The project emphasizes **engineering rigor, reproducibility, and honest evaluation**, following
-best practices used in modern research and production ML systems.
+The goal of this project is to understand which **brain activity patterns are associated with ADHD** and whether these patterns differ between males and females. The implementation of this project  emphasizes engineering rigor, reproducibility, and honest evaluation, following best practices used in modern research and production ML systems.
 
 > This work was developed as part of the **WiDS Datathon 2025**.  
 > Competition details are available [here](https://www.kaggle.com/competitions/widsdatathon2025/overview).
