@@ -13,7 +13,7 @@ This model predicts two binary outcomes:
 - ADHD_Outcome
 - Sex_F
 
-using multimodal inputs including:
+using various inputs including:
 - categorical metadata
 - quantitative metadata
 - functional connectome features
