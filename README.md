@@ -1,140 +1,115 @@
 # Multimodal Prediction of ADHD Outcome and Sex
 
-**Quick Summary**  
-This repository implements a **leakage-free, multimodal machine learning pipeline**
-for **multi-output classification** of:
+## Overview
+This project implements an end-to-end machine learning system for jointly predicting ADHD diagnosis and sex using heterogeneous data sources, including socio-demographic metadata and functional brain imaging features.  
 
-- **ADHD_Outcome** (binary)
-- **Sex_F** (binary)
+The goal of this project is to understand which **brain activity patterns are associated with ADHD** and whether these patterns differ between males and females.  
 
-using heterogeneous data sources, including categorical metadata, quantitative clinical features,
-and high-dimensional functional connectome matrices.
-
-The goal of this project is to understand which **brain activity patterns are associated with ADHD** and whether these patterns differ between males and females. The implementation of this project  emphasizes engineering rigor, reproducibility, and honest evaluation, following best practices used in modern research and production ML systems.
+The implementation of this project  emphasizes reliable pipeline design, evaluation tradeoffs, and reproducibility, following best practices in modern research and production ML systems.
 
 > This work was developed as part of the **WiDS Datathon 2025**.  
 > Competition details are available [here](https://www.kaggle.com/competitions/widsdatathon2025/overview).
 
 ---
-## 🔍 Problem Setting
+## Problem Framing
 
-The dataset contains three distinct modalities:
+The task is formulated as a multi-output classification problem, where two correlated targets must be predicted simultaneously:
 
-- **Categorical metadata** — demographics and clinical flags
-- **Quantitative metadata** — numerical clinical measurements
-- **Functional connectome matrices** — high-dimensional neuroimaging features
+- ADHD diagnosis (binary)
+- Sex (binary)
 
-The task is **multi-output classification**, where each subject has *two correlated targets*
-that are predicted jointly.
+Key challenges in this dataset include:
 
-Rather than treating these as independent problems, this project models them together to
-capture shared structure and correlations across tasks
+- Missing and noisy clinical metadata
 
----
+- Class imbalance
 
-## 🧠 Core Design Principles
+- High-dimensional functional connectome features
 
-### 1. Strict Separation of Concerns
+- Heterogeneous statistical properties across modalities
 
-Each script has a single, clearly defined responsibility:
-
-| Script | Responsibility |
-|------|----------------|
-| `preprocess.py` | Load raw data, clean, merge modalities, and save numeric tensors |
-| `feature_select.py` | Feature-selection utilities (pure functions, no I/O, no splitting) |
-| `train_model.py` | Train/validation split, feature selection(train only), model training |
-| `evaluate.py` | Validation metrics + test-set prediction only |
-
-This structure makes the pipeline **auditable, testable, and resistant to hidden coupling**.
+These constraints require careful preprocessing and model selection to avoid overfitting and brittle results.
 
 ---
+## System Overview
 
-### 2. Leakage-Free Evaluation (Critical)
+**High-level pipeline:**
 
-Any operation that **learns from labels** is restricted to the **training split only**:
+1. Data ingestion and validation
+2. Modality-specific preprocessing of:
+    - Socio-demographic metadata 
+    - Quantitative clinical features  
+    - Functional connectome representations
+3. Feature engineering and alignment
+4. Multi-output model training
+5. Evaluation and error analysis
 
-- Feature selection
-- Model fitting
+Each stage is implemented as a modular component to support clarity, reproducibility, and future extensibility.
 
-Validation data is treated as *future, unseen data*.
-This prevents optimistic bias and ensures reported metrics are **honest and defensible**.
+## Key Design Choices
 
----
+**Model choice (Random Forest):**  
+Random Forests were selected to balance interpretability, robustness to mixed feature types, and performance on limited sample sizes, while avoiding the overfitting risk of more complex architectures.
 
-### 3. Model-Driven Feature Selection
+**Multi-output learning:**  
+Joint prediction was used to capture correlations between ADHD diagnosis and sex within a single, unified training pipeline.
 
-Feature selection is performed using a MultiOutputClassifier(RandomForestClassifier):
-
-
-Feature importance is:
-- computed per output
-- aggregated across outputs
-- thresholded by percentile
-
-This aligns feature selection with the **inductive bias of the final model**.
-
----
-
-### 4. Binary Artifacts for ML Stages
-
-Intermediate ML artifacts are stored as:
-
-- `.npy` arrays for features and labels
-- `.json` for feature names and selected features
-
-This avoids:
-- dtype ambiguity
-- CSV parsing errors
-- floating-point drift
-- accidental index misalignment
+**Feature engineering strategy:**  
+Preprocessing was applied per modality to avoid leaking assumptions across heterogeneous data sources and to preserve signal integrity.
 
 ---
+## Tradeoffs and Failure Modes
 
-## 📂 Repository Structure
+- The current approach does not scale efficiently to very high-dimensional connectome representations without additional dimensionality reduction.
+- Random Forests limit representational capacity compared to deep learning models, but were intentionally chosen to prioritize stability and interpretability.
+- Model performance is sensitive to missing-data patterns, making robust preprocessing and validation critical.
+
+These tradeoffs were accepted to ensure reliable baseline behavior under real-world data constraints.
+
+---
+## Future Improvements
+
+- Introduce dimensionality reduction or learned embeddings for functional connectome features
+- Add systematic model monitoring and data drift analysis
+- Explore alternative architectures while preserving pipeline modularity and evaluation rigor
+
+---
+## Repository Structure
 **Please note that Raw TRAIN and TEST data are **not included** in this repository due to size constraints. 
-They can be downloaded [here](https://www.kaggle.com/competitions/widsdatathon2025/data) directly from Kaggle.
+They can be downloaded [here](https://www.kaggle.com/competitions/widsdatathon2025/data).
 ```
 multimodal-adhd-sex-prediction/
-├── data/                    
-│   ├── solution_template.csv
-│   ├── processed\
-│   │   ├── eval \
-│   │   ├── model\
-│   │   ├── feature_names.json
-│   │   ├── X_test.npy
-│   │   ├── X_train.npy
-│   │   ├── y_train.npy
-│   ├── TEST
-│   └── TRAIN
-├── src/                    
+├── notebooks/          # Exploratory analysis and prototyping
+├── src/                # Modular pipeline implementation
 │   ├── preprocess.py
 │   ├── feature_select.py
 │   ├── train_model.py
 │   └── evaluate.py
-├── requirements.txt
+├── results/            # Model outputs and evaluation artifacts
 ├── MODEL_CARD.md
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
 
-## ⚙️ How to Run the Pipeline
+## How to Run the Pipeline
 
-### 1. Preprocessing
+#### 1. Preprocessing
 ```bash
 python src/preprocess.py \
   --data_dir data \
   --output_dir data/processed
 ```
 
-### 2. Training
+#### 2. Training
 ```bash
 python src/train_model.py \
   --data-dir data/processed \
   --output-dir data/processed/model \
 ```
 
-### 3. Evaluating
+#### 3. Evaluating
 ```bash
 python src/evaluate.py \
   --data-dir data/processed \
@@ -142,29 +117,32 @@ python src/evaluate.py \
   --output-dir data/processed/eval
 ```
 
-## 📊 Evaluation
+---
+## Evaluation
 
-Validation metrics reported per target:
-Accuracy
-Precision
-Recall
-F1
-ROC-AUC
+Validation metrics reported per target:  
+- Accuracy  
+- Precision  
+- Recall  
+- F1  
+- ROC-AUC  
 
 No aggregate metrics are used, as they can obscure task-specific performance and mask failure modes.
 
+---
+## Key Takeaway
 
-## 📜 Disclaimer
+This project demonstrates how machine learning models fit into a larger system, where data quality, evaluation strategy, and maintainability matter as much as model choice.
+
+---
+## Disclaimer
 
 This project is for research and educational purposes only.
 It is not a medical diagnostic tool.
 
-## 👩🏽‍💻 Author
+---
+## Author
 
-Anni Bamwenda
-
-Software Engineer II • Data Scientist • AI/ML Engineer
-
-🔗 LinkedIn https://www.linkedin.com/in/annibamwenda/
-
-🔗 GitHub: https://github.com/Anni-Bamwenda
+Anni Bamwenda  
+Software Engineer II • AI/ML Engineer  
+🔗[LinkedIn](https://www.linkedin.com/in/annibamwenda/)     👩🏾‍💻[GitHub](https://github.com/Anni-Bamwenda)
