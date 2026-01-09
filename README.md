@@ -130,6 +130,16 @@ Validation metrics reported per target:
 No aggregate metrics are used, as they can obscure task-specific performance and mask failure modes.
 
 ---
+## Results
+
+Evaluation artifacts are saved under the `results/` directory:
+```bash
+- results/metrics_validation.json # summary validation metrics
+- results/report_validation.txt # detailed classification report
+- results/predictions_test.csv # test-set predictions
+```
+
+---
 ## Key Takeaway
 
 This project demonstrates how machine learning models fit into a larger system, where data quality, evaluation strategy, and maintainability matter as much as model choice.
