@@ -1,0 +1,14 @@
+ADHD_Outcome
+  accuracy: 0.6872
+  precision: 0.6907
+  recall: 0.9819
+  f1: 0.8109
+  roc_auc: 0.6534
+
+Sex_F
+  accuracy: 0.6749
+  precision: 1.0000
+  recall: 0.0125
+  f1: 0.0247
+  roc_auc: 0.6416
+

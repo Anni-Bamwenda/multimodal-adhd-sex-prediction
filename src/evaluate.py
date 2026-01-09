@@ -22,7 +22,6 @@ Example usage(CLI):
 python src/evaluate.py \
   --data-dir data/processed \
   --model-dir data/processed/model \
-  --output-dir data/processed/eval
 
 Author: Anni Bamwenda
 """
@@ -32,8 +31,8 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
-
 import joblib
+
 import numpy as np
 import pandas as pd
 from sklearn.metrics import (
@@ -43,10 +42,11 @@ from sklearn.metrics import (
     f1_score,
     roc_auc_score,
 )
-
 from feature_select import apply_feature_selector
-
-
+# ---------------------------------------------------------------------
+# -- Constants
+RESULTS_DIR = Path("results")
+RESULTS_DIR.mkdir(exist_ok=True)
 TARGET_NAMES = ["ADHD_Outcome", "Sex_F"]
 
 
@@ -75,13 +75,11 @@ def main():
     parser = argparse.ArgumentParser(description="Evaluate model and predict test set")
     parser.add_argument("--data-dir", type=str, required=True)
     parser.add_argument("--model-dir", type=str, default="data/processed/model")
-    parser.add_argument("--output-dir", type=str, default="data/processed/eval")
     args = parser.parse_args()
 
     data_dir = Path(args.data_dir)
     model_dir = Path(args.model_dir)
-    output_dir = Path(args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
+    output_dir = RESULTS_DIR
 
     # --------------------
     # Load artifacts
